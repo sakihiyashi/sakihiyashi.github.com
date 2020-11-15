@@ -1,0 +1,1529 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.8.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Saki Hiyashi">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Geospatial Analysis This was a project I worked on that heavily relied on demographic data and geospatial analysis to meet the client’s needs. The dataset was curated while I was working at a previous company, one of the few datasets that curate arrest and charges case data in Baltimore City that was related to the Gun Trace Task Force - whose current trials are still ongoing for the officers that have been charged.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="../../project/geospatial-analysis/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css" integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous">
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js" integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+        
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="../../css/academic.css">
+
+  
+
+
+
+
+  
+
+
+  
+  
+
+  
+
+  <link rel="manifest" href="../../index.webmanifest">
+  <link rel="icon" type="image/png" href="../../images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="../../images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="../../project/geospatial-analysis/">
+
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary">
+  
+  <meta property="og:site_name" content="Saki Hiyashi">
+  <meta property="og:url" content="/project/geospatial-analysis/">
+  <meta property="og:title" content="Geospatial Analysis on Civilians Arrested by the Gun Trace Task Force | Saki Hiyashi">
+  <meta property="og:description" content="Geospatial Analysis This was a project I worked on that heavily relied on demographic data and geospatial analysis to meet the client’s needs. The dataset was curated while I was working at a previous company, one of the few datasets that curate arrest and charges case data in Baltimore City that was related to the Gun Trace Task Force - whose current trials are still ongoing for the officers that have been charged."><meta property="og:image" content="/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png">
+  <meta property="twitter:image" content="/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2020-06-11T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2020-06-11T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/project/geospatial-analysis/"
+  },
+  "headline": "Geospatial Analysis on Civilians Arrested by the Gun Trace Task Force",
+  
+  "datePublished": "2020-06-11T00:00:00Z",
+  "dateModified": "2020-06-11T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Saki Hiyashi"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Saki Hiyashi",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "Geospatial Analysis This was a project I worked on that heavily relied on demographic data and geospatial analysis to meet the client’s needs. The dataset was curated while I was working at a previous company, one of the few datasets that curate arrest and charges case data in Baltimore City that was related to the Gun Trace Task Force - whose current trials are still ongoing for the officers that have been charged."
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>Geospatial Analysis on Civilians Arrested by the Gun Trace Task Force | Saki Hiyashi</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="../../">Saki Hiyashi</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="../../">Saki Hiyashi</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#hero"><span>Demo</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../hiyashi_2020.pdf"><span>Resume</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link js-theme-selector" data-toggle="dropdown" aria-haspopup="true">
+          <i class="fas fa-palette" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  <article class="article article-project">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Geospatial Analysis on Civilians Arrested by the Gun Trace Task Force</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Jun 11, 2020
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="../../category/data-analysis/">data analysis</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+
+
+<div id="geospatial-analysis" class="section level1">
+<h1>Geospatial Analysis</h1>
+<p>This was a project I worked on that heavily relied on demographic data and geospatial analysis to meet the client’s needs. The dataset was curated while I was working at a previous company, one of the few datasets that curate arrest and charges case data in Baltimore City that was related to the Gun Trace Task Force - whose current trials are still ongoing for the officers that have been charged. Unsure for legal reasons if I can be able to post the code made to web scrape the Maryland State Case Search: once I get an update, I’ll add it to a post or a separate project.</p>
+<p>The goal and purpose of this map was to see where the civilians who were arrested lived, their race, age and what they were arrested for.</p>
+<p>This analysis was taking all the addresses scraped on the case search engine, pretty scary right! Before I get ahead of myself, I had to properly set up my REnviron. and make sure that I had all libraries needed to run the script:</p>
+<pre class="r"><code>library(sp)
+library(sf)
+library(tidyverse)
+library(ggmap)
+library(maps)
+library(tmap)
+library(tmaptools)
+library(htmlwidgets)</code></pre>
+<p>Most of these packages make it easier for me to manipulate the data visually or it allows me to transform shapefiles so that my data falls upon the correct geographical markers ~~ like streets, highways and in this case county lines within Baltimore City and the surrounding areas.</p>
+<p>So here I found a free to use shapefile of Baltimore City and Baltimore County because, man these poo poo police officers were definitely making quota! FYI, when we did the initial webscrape these guys were arresting people all over MD! Sickening!</p>
+<pre class="r"><code># setting up data ---------------------------------------------------------
+
+# # load the data
+county_sections &lt;- readOGR(&quot;data/raw_data/md_counties/geo_export_mdc.shp&quot;)
+
+# view attributes ---------- COUNTIES
+class(county_sections)
+extent(county_sections)
+crs(county_sections)
+
+plot(county_sections)
+
+# lets filter down to only baltimore area zipcodes!
+# we can filter for other zips after
+
+# baltimore only
+baltimore_county &lt;- subset(county_sections, geodesc == &quot;Baltimore County&quot;)
+baltimore_city &lt;- subset(county_sections, geodesc == &quot;Baltimore City&quot;)
+city_county &lt;- subset(county_sections, 
+                      geodesc == &quot;Baltimore County&quot; | geodesc == &quot;Baltimore City&quot;)</code></pre>
+<p>I had an address data set, but unfortunately the FULL address was in one column! Had to go ahead and just break that down. As you can see below, I extract the an address vector and call it <code>bmoreadddy_unique</code> because I only needed to see the unique set of addresses.</p>
+<p>I then created an empty vector called <code>geo_bmore</code> which will hold the broken down columns and rows of the addresses that were collected.</p>
+<pre class="r"><code># geocode normal addresses ------------------------------------------------
+# just remember to reference unique list to find the rows that are messed up!
+# then look by case number from bmore_address, then join to full data set bmore_demo (which will eventually replace
+# mdcs_cop_demo_df() reference &#39;raw_code/demo_filters.R&#39; file
+bmoreaddy_unique = unique(bmore_address$full_address)
+
+geo_bmore &lt;- c()
+# i &lt;- 1
+# hit limit will run again at lunch
+# i = 6328 ~ end result
+while(i &lt;= length(bmoreaddy_unique)) {
+  geo_bmore_row &lt;- geocode_OSM(bmoreaddy_unique[i])
+  if(is.null(geo_bmore_row)){
+    i &lt;- i + 1
+    next;
+  }
+  geo_bmore_row &lt;- tibble(obs_num = i, 
+                          full_address = geo_bmore_row[[1]],
+                          # up and down
+                          lon = geo_bmore_row[[2]][1],
+                          # left to right
+                          lat = geo_bmore_row[[2]][2]
+  )
+  # creating geo_bmore sp object
+  geo_bmore &lt;- bind_rows(geo_bmore, geo_bmore_row)
+  i &lt;- i + 1
+}
+
+# Take a peek at problem address (ones that break the geocode code)
+bmoreaddy_unique[i]
+# Write down the bad ones!
+i &lt;- i+1
+
+save(geo_bmore, 
+     file = here::here(&quot;data/tidy_data&quot;,
+                       &quot;geo_bmore_unique_addy.rda&quot;))</code></pre>
+<p>So…..if you’re not used to if, while or for loops…what just happened might’ve confused the heck out of you just now. It’s ok, I’m going to explain it as best as I can..</p>
+<p>Basically what I’m telling R to do, is go through the vector and label each row a number, then geocode each row from the original data set. If the address does not end up being geodcoded, skip the row and go to the next row. BUT if the address was successfully geocoded, then add 4 new columns <code>geo_bmore_row</code> to the empty vector we created in the beginning of the code chunk <code>geo_bmore</code>. Thus created a new dataset of full addresses, connected with lat and lon and the observation number. The observation number allows us to trace it back to other datasets in case we need to easily join them later on in analysis.</p>
+<p>We then bind, basically pasting together, the datasets together by rows thus created a clean data set of addresses and the connecting latitudes and longitudes. This process normally takes about 10-20 minutes, so don’t fret. I used the OSM search engine instead of Google’s because there were to many complications on the system I was running at the time of employment. OSM gave less stress ~</p>
+<p>Next Chunk!</p>
+<p>Remember earlier when I explained, or tried my best, that while loop and that it may skip some rows? Here is where I address the missing addresses. I needed to antijoin the final geocoded addreses, <code>geo_bmore</code>, with the original addresses scraped from the Maryland Case Search, <code>bmore_address</code>. Below are 3 examples of antijoining the two datasets using dplyr and two forms of baseR.</p>
+<pre class="r"><code># quality control for missed addresses ------------------------------------
+# not creating new variables, so im just going to do it like this
+# three different ways to anti_join
+# 1
+no_geo_unique &lt;- unique(bmore_address$full_address[!bmore_address$full_address%in%geo_bmore$full_address])
+
+# 2
+no_geo_case &lt;- bmore_address[is.na(match(bmore_address$full_address, geo_bmore$full_address)), ]
+
+# 3
+anti_join(bmore_address, geo_bmore, by = &quot;full_address&quot;)</code></pre>
+<p>Now that we have a dataset of all of the missing addresses that did not get geocoded, we are going to filter through the dataset and allow R to separate and clean the problematic rows that we could not address before!</p>
+<pre class="r"><code># quality control workup --------------------------------------------------
+no_geo = no_geo_case
+# taking away so I can get unique values
+no_geo = no_geo %&gt;%
+  select(-case_num)
+# takes rowname col into actual rownames
+no_geo = column_to_rownames(no_geo)
+# only gives unique addresses and keeps rownames
+no_geo = unique(no_geo)
+# add rowname col back after only getting unique addys
+# rownames basically = obs_num
+# use this to join again
+# no_geo = rownames_to_column(no_geo)
+
+
+# separating the address string
+problem_rows = as_tibble(str_split_fixed(no_geo$full_address,
+                                         # telling R to separate by commas
+                                         &quot;, &quot;,
+                                         # there should be at least 5 separations
+                                         n = 5))
+
+# we only needed these columns which were rowname, full_address
+problem_rows = paste0(str_c(problem_rows$V1,
+                            &quot;, &quot;,
+                            problem_rows$V3,
+                            &quot;, &quot;,
+                            problem_rows$V5
+))
+
+
+# converts from vector to df or tibble
+problem_rows = enframe(problem_rows)
+
+# renaming for future cleaning
+colnames(problem_rows)[1] &lt;- &quot;rowname&quot;
+colnames(problem_rows)[2] &lt;- &quot;full_address&quot;
+
+# adds correct obs_num to tbl_df/tbl/data.frame
+problem_rows = problem_rows %&gt;%
+  mutate(rowname = rownames(no_geo))
+
+# sets appropriate &quot;i&quot; for while loop below. 
+problem_rows = column_to_rownames(problem_rows)
+
+# creating var
+new_geo &lt;- c()
+
+i = 1
+while(i &lt;= length(problem_rows$full_address)) {
+  no_geo_row &lt;- geocode_OSM(problem_rows$full_address[i])
+  if(is.null(no_geo_row)){
+    i &lt;- i + 1
+    next;
+  }
+  new_geo_row &lt;- tibble(obs_num = i, 
+                        full_address = no_geo_row[[1]],
+                        # up and down
+                        lon = no_geo_row[[2]][1],
+                        # left to right
+                        lat = no_geo_row[[2]][2]
+  )
+  # creating geo_bmore sp object
+  new_geo &lt;- bind_rows(new_geo, new_geo_row)
+  i &lt;- i + 1
+}
+
+problem_rows$full_address[i]
+i &lt;- i+1
+
+save(new_geo,
+     file = here::here(&quot;data/tidy_data&quot;,
+                       &quot;new_geo.rda&quot;))</code></pre>
+<p>The original while loop was used for the list of problematic addresses and then saved to the local disk for safe keeping. I know, I know! Why did you not just turn the loop into a function? Well I didn’t know that at this point and time in my career! But I definitely do it more later on in work!</p>
+<p>Here is some cleaning, tidying and data maintenance I had to do before using them to map anything:</p>
+<p>HINTS:
+- <code>bmore_demo</code> was a curated tidied dataset from all the case data that held age, race, name, address, court type, case type and other demographic data that was scraped and accumulated legally for THE FREE online using the Maryland Case Search Engine.</p>
+<pre class="r"><code># collecting all data together --------------------------------------------
+# these both have correct coords and addresses
+# lets unite them together 
+head(new_geo)
+head(geo_bmore)
+
+# lets rename new_geo coded addresses so there isn&#39;t a mix up
+colnames(new_geo)[2] &lt;- &quot;geocoded_addresses&quot;
+
+
+# but first we need to make sure that addresses in new_geo will match addresses
+# bmore_demo YIKES YIKES YIKES!
+# renaming col for binding purposes
+colnames(problem_rows)[2] &lt;- &quot;geocoded_address&quot;
+
+# problem_rows = no_geo, basically
+matching = cbind(problem_rows, no_geo)
+
+# join new_geo and matching by geocoded_addresses
+new_geo = left_join(new_geo, matching, by = &quot;geocoded_address&quot;)
+
+# take away incorrect current $obs_num and $geocoded_address
+new_geo = new_geo %&gt;%
+  select(-obs_num)
+
+new_geo = new_geo %&gt;%
+  select(-geocoded_address)
+
+# lets rearrange col order for perfect alignment
+new_geo = new_geo[, c(3,4,1,2)]
+
+# change rowname to finally correct obs_num
+colnames(new_geo)[1] &lt;- &quot;obs_num&quot;
+
+# let&#39;s rbind with geo_bmore and finally start mapping!!!!!!!!!!
+geo_bmore = rbind(geo_bmore, new_geo)
+geo_bmore = geo_bmore %&gt;%
+  arrange(as.double(obs_num))
+
+
+# RUN TO MATCH geo_bmore DATASET - comment out after running
+# bmore_demo$full_address = paste0(str_c(bmore_demo$full_address, &quot;, USA&quot;))
+
+# DO NOT RUN UNTIL ALL GEOCODES HAVE BEEN ACCOUNTED FOR
+# lets use tmap package to see if we can get some coords
+bmore_demo = left_join(geo_bmore, bmore_demo, by = &quot;full_address&quot;)
+# nrow(bmore_demo)
+# 6721
+
+# FILTER FOR ONLY DISTRICT COURT CASES
+bmore_demo &lt;- bmore_demo %&gt;%
+  filter(case_type_2 != &quot;Other&quot;)
+# nrow(bmore_demo)
+# 6078 ~ geocoded
+# 7687 ~ filtered
+# 7748 ~ original # cases
+
+# Filter out Circuit Court cases
+bmore_demo &lt;- bmore_demo[str_detect(bmore_demo$court, &quot;District&quot;),]
+# nrow(bmore_demo) - 80.46% retained
+# geo_coded ~ 3645 
+# filtered ~ 4530  
+
+bmore_demo_geo = bmore_demo
+# save this demo as bmore_demo_geo.rda
+# please keep original data set!!!!
+save(bmore_demo_geo,
+     file = here::here(&quot;data/tidy_data&quot;,
+                       &quot;bmore_demo_geo.rda&quot;))</code></pre>
+<p>Creating a dataset of markers. Nothing special</p>
+<p>HINTS:
+- <code>mdcs_demo_dfc</code> was a semi tidy dataset that inlcuded all cases that were related to any of the officers that were apart of the Gun Trace Task Force in both the Circuit and District Court circuits.</p>
+<pre class="r"><code># creating markers --------------------------------------------------------
+# UPDATE AND RERUN EVERY TIME NEW GEO_BMORE SP DATA IS ADDED
+# keeps only data that was geocoded
+bmore_plot1 &lt;- left_join(geo_bmore, 
+                         bmore_address,
+                         by = &quot;full_address&quot;)
+# keeps all rows and data
+# bmore_plot2 &lt;- left_join(bmore_address, 
+#                          geo_bmore,
+#                          by = &quot;full_address&quot;)
+
+# save under data set that has filtered out district court cases
+bmoredemo_markers1 &lt;- left_join(bmore_plot1,
+                                mdcs_demo_dfc,
+                                by = &quot;case_num&quot;)
+# keeps all rows and data
+# bmoredemo_markers2 &lt;- left_join(bmore_plot2,
+#                                mdcs_demo_dfc,
+#                                by = &quot;case_num&quot;)
+
+# have to do some sligt cleaning ~ run when data is new
+# bmoredemo_markers1 = bmoredemo_markers1 %&gt;% select(-full_address.y)
+# colnames(bmoredemo_markers1)[colnames(bmoredemo_markers1) == &quot;full_address.x&quot;] &lt;- &quot;full_address&quot;
+
+
+# this adds the charges data to the dataset
+bmoredemo_markers1 &lt;- left_join(mdcs_charges_df,
+                                bmoredemo_markers1,
+                                by = &quot;case_num&quot;)
+
+# filtering out what I need only for demographic data
+bmoredemo_markers1 = bmoredemo_markers1 %&gt;% 
+  dplyr::select(case_num,
+                full_address,
+                lat,
+                lon,
+                race_black,
+                race_cat,
+                age_yrs,
+                sex_id,
+                case_type,
+                case_type_2,
+                ) %&gt;% 
+  group_by(case_num) %&gt;% 
+  ungroup()
+
+# there are two incomplete addresses that are throwing the map off. 
+# bmoredemo_markers1 = bmoredemo_markers1 %&gt;% filter(!case_num == &quot;XXXXXXXX&quot;|!case_num == &quot;XXXXXXXXXXXXX&quot;)
+# bmoredemo_markers1 = bmoredemo_markers1[bmoredemo_markers1$case_num != &quot;XXXXXXXXXX&quot;, ]
+# bmoredemo_markers1 = bmoredemo_markers1[bmoredemo_markers1$case_num != &quot;XXXXXXXXXX&quot;, ]
+
+# saves into local environment
+save(bmoredemo_markers1, 
+     file = here::here(&quot;data/tidy_data&quot;,
+                       &quot;bmore_markers.rda&quot;))</code></pre>
+<p>OKAY~~</p>
+<p>So if you made it this far to see the maps….well good luck because I can only show you the code because of our American Justice System, and the fact that I respect my old employer lol…</p>
+<p>This is where I allow my artist creativity run wild…within the confines of R and Leaflet!</p>
+<pre class="r"><code># making the base map vars ------------------------------------------------
+# sex ~ M/F
+sex_icons &lt;- colorFactor(c(&quot;#0d2666&quot;, &quot;#53a097&quot;, &quot;#682140&quot;),
+                         domain = unique(bmoredemo_markers1$sex_id))
+# mult races
+racecat_icons &lt;- colorFactor(c(&quot;#78840b&quot;, &quot;#036852&quot;, &quot;#a53208&quot;),
+                             domain = unique(bmoredemo_markers1$race_cat))
+# black/nonblack
+raceblack_icons &lt;- colorFactor(c(&quot;#ffa500&quot;, &quot;#b7b2ac&quot;),
+                               domain = unique(bmoredemo_markers1$race_black))
+# age
+pal &lt;- colorNumeric(palette = diverge_hcl(5, &quot;Berlin&quot;),
+                    domain = bmoredemo_markers1$age_yrs)</code></pre>
+<p>Now I know you guys are like, why only two genders… well our legal justice system doesn’t see otherwise unfortunately so there’s a whole subset of data unaccounted for to go along with broken window policing… oh yea..if you’re guessing hate crimes or sex workers being arrested…you were on the right path. Unfortunately our client was really interested on the impact these officers had on the <code>urban</code> community so they were interested to see whether the officers were indeed practicing broken window policing OR was it a big misunderstanding?</p>
+<p>I mean…our company alone scraped over 10,000 cases in a 7-10 year time frame…while the news under reported per usual. So…they were just being shit cops. The race categories were WHITE, BLACK, and OTHER.</p>
+<p>Below is where all the work from above, and the work not seen that will be uploaded to other projects..cough cough. The map was interactive and super colorful. Like I mentioned earlier, let me see if I can post a picture here after talking to my previoud employer.</p>
+<p>Thanks for stopping by ~</p>
+<pre class="r"><code># map making --------------------------------------------------------------
+# REMINDER: every time new variations are made must run empty leaflet line
+# or the map will just be written over and not rerun
+
+#          attribution = &#39;Map tiles by &lt;a href=&quot;http://stamen.com&quot;&gt;Stamen Design&lt;/a&gt;, &lt;a href=&quot;http://creativecommons.org/licenses/by/3.0&quot;&gt;CC BY 3.0&lt;/a&gt; &amp;mdash; Map data &amp;copy; &lt;a href=&quot;http://www.openstreetmap.org/copyright&quot;&gt;OpenStreetMap&lt;/a&gt;. *Displayed cases are 80% of total data set aggregated. Cases are over a period of ~10yrs.
+
+
+# creates map object
+bmore_map = leaflet()
+
+# adding data
+# examples say to put addLayersControl() at end of map making
+bmore_map = bmore_map %&gt;%
+  addTiles(&#39;http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png&#39;,
+  attribution = &#39;Map tiles by &lt;a href=&quot;http://stamen.com&quot;&gt;Stamen Design&lt;/a&gt;, &lt;a href=&quot;http://creativecommons.org/licenses/by/3.0&quot;&gt;CC BY 3.0&lt;/a&gt; &amp;mdash; Map data &amp;copy; &lt;a href=&quot;http://www.openstreetmap.org/copyright&quot;&gt;OpenStreetMap&lt;/a&gt;. *Displayed cases are 80% of total data set aggregated. Cases are over a period of ~10yrs. Problem Forward &amp;copy&#39; ) %&gt;%
+  fitBounds(-76.89493, 39.19533, -76.32139, 39.72115) %&gt;%
+  addPolygons(data = baltimore_county,
+              group = &quot;County&quot;,
+              color = &quot;#b799ff&quot;,
+              fill = FALSE) %&gt;%
+  addPolygons(data = baltimore_city,
+              group = &quot;City&quot;,
+              color = &quot;#c0a5ff&quot;,
+              fill = FALSE) %&gt;%
+  addCircles(data = bmoredemo_markers1,
+             lng = ~lon,
+             lat = ~lat,
+             group = &quot;Points&quot;,
+             popup = bmoredemo_markers1$case_num,
+             weight = 3,
+             radius = 40,
+             stroke = TRUE,
+             fillOpacity = 0.8,
+             color = &quot;#ff0000&quot;,
+             label = ~ c(as.character(bmoredemo_markers1$case_num),
+                         as.character(bmoredemo_markers1$charge_desc)),
+             options = markerClusterOptions(removeOutsideVisibleBounds = TRUE)) %&gt;%
+  addCircles(data = bmoredemo_markers1,
+             lng = ~lon,
+             lat = ~lat,
+             group = &quot;Black/Non-Black&quot;,
+             popup = bmoredemo_markers1$race_black,
+             weight = 3,
+             radius = 40,
+             stroke = TRUE,
+             fillOpacity = 0.8,
+             color = ~raceblack_icons(race_black),
+             label = ~as.character(bmoredemo_markers1$race_black),
+             options = markerClusterOptions(removeOutsideVisibleBounds = TRUE)) %&gt;%
+  addLegend(&quot;bottomright&quot;,
+            colors = c(&quot;#ffa500&quot;, &quot;#b7b2ac&quot;),
+            labels = c(&quot;Black&quot;, &quot;Non-Black&quot;),
+            title = &quot;Cases by Race&quot;,
+            group = &quot;Black/Non-Black&quot;) %&gt;%
+  addCircles(data = bmoredemo_markers1,
+             lng = ~lon,
+             lat = ~lat,
+             group = &quot;Black/White/Other&quot;,
+             popup = bmoredemo_markers1$race_cat,
+             weight = 3,
+             radius = 40,
+             stroke = TRUE,
+             fillOpacity = 0.8,
+             color = ~racecat_icons(race_cat),
+             label = ~as.character(bmoredemo_markers1$case_num),
+             options = markerClusterOptions(removeOutsideVisibleBounds = TRUE)) %&gt;%
+  addLegend(&quot;bottomright&quot;,
+            colors = c(&quot;#78840b&quot;, &quot;#036852&quot;, &quot;#a53208&quot;),
+            labels = c(&quot;Black&quot;, &quot;Other/Unknown&quot;, &quot;White&quot;),
+            title = &quot;Cases by Race Mult&quot;,
+            group = &quot;Black/White/Other&quot;,
+            labFormat = labelFormat(group = &quot;Black/White/Other&quot;)) %&gt;%
+  addCircles(data = bmoredemo_markers1,
+             lng = ~lon,
+             lat = ~lat,
+             group = &quot;Female/Male&quot;,
+             popup = bmoredemo_markers1$sex_id,
+             weight = 3,
+             radius = 40,
+             stroke = TRUE,
+             fillOpacity = 0.8,
+             color = ~sex_icons(sex_id),
+             label = ~as.character(bmoredemo_markers1$sex_id),
+             options = markerClusterOptions(removeOutsideVisibleBounds = TRUE)) %&gt;%
+  addLegend(&quot;bottomleft&quot;,
+            colors = c( &quot;#53a097&quot;, &quot;#0d2666&quot;, &quot;#682140&quot;),
+            labels = c(&quot;Male&quot;, &quot;Female&quot;, &quot;Other/Unknown&quot;),
+            title = &quot;Cases by Sex&quot;,
+            group = &quot;Female/Male&quot;,
+            labFormat = labelFormat()) %&gt;%
+  addCircles(data = bmoredemo_markers1,
+             lng = ~lon,
+             lat = ~lat,
+             group = &quot;Age&quot;,
+             weight = 2,
+             radius = 25,
+             stroke = TRUE,
+             fillOpacity = 0.5,
+             color = ~pal(age_yrs),
+             label = ~as.character(bmoredemo_markers1$age_yrs),
+             options = markerClusterOptions(removeOutsideVisibleBounds = TRUE)) %&gt;%
+  addLegend(&quot;bottomleft&quot;,
+            pal = pal,
+            values = bmoredemo_markers1$age_yrs,
+            title = &quot;Age&quot;,
+            group = &quot;Age&quot;) %&gt;%
+  addLayersControl(overlayGroups = c(&quot;City&quot;,
+                                     &quot;County&quot;),
+                   baseGroups = c(&quot;Points&quot;,
+                                  &quot;Black/Non-Black&quot;, 
+                                  &quot;Black/White/Other&quot;,
+                                  &quot;Female/Male&quot;,
+                                  &quot;Age&quot;),
+                   options = layersControlOptions(collapsed = TRUE, autoZIndex = TRUE)) %&gt;%
+  hideGroup(c(&quot;Points&quot;,
+              &quot;Black/Non-Black&quot;, 
+              &quot;Black/White/Other&quot;,
+              &quot;Female/Male&quot;,
+              &quot;Age&quot;))
+
+  
+
+# data added on the map
+
+# saves map
+htmlwidgets::saveWidget(bmore_map,
+           file = here::here(&quot;products/bmore_map.html&quot;),
+           selfcontained = FALSE)
+
+webshot(&quot;products/bmore_map.html&quot;,
+        file = here::here(&quot;products/bmore_map.png&quot;,
+                          cliprect = &quot;viewport&quot;))
+
+
+
+mapshot(bmore_map, url = paste0(getwd(), &quot;/bmore_map.html&quot;))
+
+
+# actual function
+# function (map, urlTemplate = &quot;//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;, 
+#           attribution = NULL, layerId = NULL, group = NULL, options = tileOptions()) 
+# {
+#   options$attribution = attribution
+#   if (missing(urlTemplate) &amp;&amp; is.null(options$attribution)) 
+#     options$attribution = paste(&quot;&amp;copy; &lt;a href=\&quot;http://openstreetmap.org\&quot;&gt;OpenStreetMap&lt;/a&gt;&quot;, 
+#                                 &quot;contributors, &lt;a href=\&quot;http://creativecommons.org/licenses/by-sa/2.0/\&quot;&gt;CC-BY-SA&lt;/a&gt;&quot;)
+#   invokeMethod(map, getMapData(map), &quot;addTiles&quot;, urlTemplate, 
+#                layerId, group, options)
+# }
+
+
+
+# edited function
+# addTiles = function (map, urlTemplate = &quot;**http:**//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+#                      attribution = NULL, layerId = NULL, group = NULL, options = tileOptions())
+# {
+#   options$attribution = attribution
+#   if (missing(urlTemplate) &amp;&amp; is.null(options$attribution))
+#     options$attribution = paste(&quot;© &lt;a href=\&quot;http://openstreetmap.org\&quot;&gt;OpenStreetMap&quot;,
+#                                 &quot;contributors, &lt;a href=\&quot;http://creativecommons.org/licenses/by-sa/2.0/\&quot;&gt;CC-BY-SA&quot;)
+#   invokeMethod(map, getMapData(map), &quot;addTiles&quot;, urlTemplate,
+#                layerId, group, options)
+# }</code></pre>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="../../tag/r/">R</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/project/geospatial-analysis/&amp;text=Geospatial%20Analysis%20on%20Civilians%20Arrested%20by%20the%20Gun%20Trace%20Task%20Force" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/project/geospatial-analysis/&amp;t=Geospatial%20Analysis%20on%20Civilians%20Arrested%20by%20the%20Gun%20Trace%20Task%20Force" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Geospatial%20Analysis%20on%20Civilians%20Arrested%20by%20the%20Gun%20Trace%20Task%20Force&amp;body=/project/geospatial-analysis/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/project/geospatial-analysis/&amp;title=Geospatial%20Analysis%20on%20Civilians%20Arrested%20by%20the%20Gun%20Trace%20Task%20Force" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Geospatial%20Analysis%20on%20Civilians%20Arrested%20by%20the%20Gun%20Trace%20Task%20Force%20/project/geospatial-analysis/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/project/geospatial-analysis/&amp;title=Geospatial%20Analysis%20on%20Civilians%20Arrested%20by%20the%20Gun%20Trace%20Task%20Force" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+    
+    
+    
+      
+    
+    
+    
+    <div class="media author-card content-widget-hr">
+      
+        
+        <img class="avatar mr-3 avatar-square" src="../../author/saki-hiyashi/avatar_hucfc1810fd53bbe2a5beeefdd186ece83_561636_270x270_fill_q90_lanczos_center.jpg" alt="Saki Hiyashi">
+      
+
+      <div class="media-body">
+        <h5 class="card-title"><a href="../../">Saki Hiyashi</a></h5>
+        <h6 class="card-subtitle">Data Science Analyst</h6>
+        <p class="card-text">I am a black and trans entry level data science analyst, I was previously employed at a data science as a service company in Baltimore, MD.</p>
+        <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="../../#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/sakihiyashi" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+</ul>
+
+      </div>
+    </div>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+    <div class="project-related-pages content-widget-hr">
+      
+      
+
+      
+      
+      
+
+      
+      
+      
+
+      
+      
+      
+    </div>
+  </div>
+</article>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+    
+    <script>const isSiteThemeDark = false;</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"No results found","placeholder":"Search...","results":"results found"};
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks",
+        'slides' : "Slides"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="../../js/academic.min.37431be2d92d7fb0160054761ab79602.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+  <p class="powered-by">
+    
+      <a href="../../privacy/">Privacy Policy</a>
+    
+    
+       &middot; 
+      <a href="../../terms/">Terms</a>
+    
+  </p>
+  
+
+  <p class="powered-by">
+    
+  </p>
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" class="back-to-top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

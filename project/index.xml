@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Projects | Saki Hiyashi</title>
+    <link>/project/</link>
+      <atom:link href="/project/index.xml" rel="self" type="application/rss+xml" />
+    <description>Projects</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 11 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png</url>
+      <title>Projects</title>
+      <link>/project/</link>
+    </image>
+    
+    <item>
+      <title>Geospatial Analysis on Civilians Arrested by the Gun Trace Task Force</title>
+      <link>/project/geospatial-analysis/</link>
+      <pubDate>Thu, 11 Jun 2020 00:00:00 +0000</pubDate>
+      <guid>/project/geospatial-analysis/</guid>
+      <description>
+
+
+&lt;div id=&#34;geospatial-analysis&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Geospatial Analysis&lt;/h1&gt;
+&lt;p&gt;This was a project I worked on that heavily relied on demographic data and geospatial analysis to meet the client’s needs. The dataset was curated while I was working at a previous company, one of the few datasets that curate arrest and charges case data in Baltimore City that was related to the Gun Trace Task Force - whose current trials are still ongoing for the officers that have been charged. Unsure for legal reasons if I can be able to post the code made to web scrape the Maryland State Case Search: once I get an update, I’ll add it to a post or a separate project.&lt;/p&gt;
+&lt;p&gt;The goal and purpose of this map was to see where the civilians who were arrested lived, their race, age and what they were arrested for.&lt;/p&gt;
+&lt;p&gt;This analysis was taking all the addresses scraped on the case search engine, pretty scary right! Before I get ahead of myself, I had to properly set up my REnviron. and make sure that I had all libraries needed to run the script:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(sp)
+library(sf)
+library(tidyverse)
+library(ggmap)
+library(maps)
+library(tmap)
+library(tmaptools)
+library(htmlwidgets)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Most of these packages make it easier for me to manipulate the data visually or it allows me to transform shapefiles so that my data falls upon the correct geographical markers ~~ like streets, highways and in this case county lines within Baltimore City and the surrounding areas.&lt;/p&gt;
+&lt;p&gt;So here I found a free to use shapefile of Baltimore City and Baltimore County because, man these poo poo police officers were definitely making quota! FYI, when we did the initial webscrape these guys were arresting people all over MD! Sickening!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# setting up data ---------------------------------------------------------
+
+# # load the data
+county_sections &amp;lt;- readOGR(&amp;quot;data/raw_data/md_counties/geo_export_mdc.shp&amp;quot;)
+
+# view attributes ---------- COUNTIES
+class(county_sections)
+extent(county_sections)
+crs(county_sections)
+
+plot(county_sections)
+
+# lets filter down to only baltimore area zipcodes!
+# we can filter for other zips after
+
+# baltimore only
+baltimore_county &amp;lt;- subset(county_sections, geodesc == &amp;quot;Baltimore County&amp;quot;)
+baltimore_city &amp;lt;- subset(county_sections, geodesc == &amp;quot;Baltimore City&amp;quot;)
+city_county &amp;lt;- subset(county_sections, 
+                      geodesc == &amp;quot;Baltimore County&amp;quot; | geodesc == &amp;quot;Baltimore City&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I had an address data set, but unfortunately the FULL address was in one column! Had to go ahead and just break that down. As you can see below, I extract the an address vector and call it &lt;code&gt;bmoreadddy_unique&lt;/code&gt; because I only needed to see the unique set of addresses.&lt;/p&gt;
+&lt;p&gt;I then created an empty vector called &lt;code&gt;geo_bmore&lt;/code&gt; which will hold the broken down columns and rows of the addresses that were collected.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# geocode normal addresses ------------------------------------------------
+# just remember to reference unique list to find the rows that are messed up!
+# then look by case number from bmore_address, then join to full data set bmore_demo (which will eventually replace
+# mdcs_cop_demo_df() reference &amp;#39;raw_code/demo_filters.R&amp;#39; file
+bmoreaddy_unique = unique(bmore_address$full_address)
+
+geo_bmore &amp;lt;- c()
+# i &amp;lt;- 1
+# hit limit will run again at lunch
+# i = 6328 ~ end result
+while(i &amp;lt;= length(bmoreaddy_unique)) {
+  geo_bmore_row &amp;lt;- geocode_OSM(bmoreaddy_unique[i])
+  if(is.null(geo_bmore_row)){
+    i &amp;lt;- i + 1
+    next;
+  }
+  geo_bmore_row &amp;lt;- tibble(obs_num = i, 
+                          full_address = geo_bmore_row[[1]],
+                          # up and down
+                          lon = geo_bmore_row[[2]][1],
+                          # left to right
+                          lat = geo_bmore_row[[2]][2]
+  )
+  # creating geo_bmore sp object
+  geo_bmore &amp;lt;- bind_rows(geo_bmore, geo_bmore_row)
+  i &amp;lt;- i + 1
+}
+
+# Take a peek at problem address (ones that break the geocode code)
+bmoreaddy_unique[i]
+# Write down the bad ones!
+i &amp;lt;- i+1
+
+save(geo_bmore, 
+     file = here::here(&amp;quot;data/tidy_data&amp;quot;,
+                       &amp;quot;geo_bmore_unique_addy.rda&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So…..if you’re not used to if, while or for loops…what just happened might’ve confused the heck out of you just now. It’s ok, I’m going to explain it as best as I can..&lt;/p&gt;
+&lt;p&gt;Basically what I’m telling R to do, is go through the vector and label each row a number, then geocode each row from the original data set. If the address does not end up being geodcoded, skip the row and go to the next row. BUT if the address was successfully geocoded, then add 4 new columns &lt;code&gt;geo_bmore_row&lt;/code&gt; to the empty vector we created in the beginning of the code chunk &lt;code&gt;geo_bmore&lt;/code&gt;. Thus created a new dataset of full addresses, connected with lat and lon and the observation number. The observation number allows us to trace it back to other datasets in case we need to easily join them later on in analysis.&lt;/p&gt;
+&lt;p&gt;We then bind, basically pasting together, the datasets together by rows thus created a clean data set of addresses and the connecting latitudes and longitudes. This process normally takes about 10-20 minutes, so don’t fret. I used the OSM search engine instead of Google’s because there were to many complications on the system I was running at the time of employment. OSM gave less stress ~&lt;/p&gt;
+&lt;p&gt;Next Chunk!&lt;/p&gt;
+&lt;p&gt;Remember earlier when I explained, or tried my best, that while loop and that it may skip some rows? Here is where I address the missing addresses. I needed to antijoin the final geocoded addreses, &lt;code&gt;geo_bmore&lt;/code&gt;, with the original addresses scraped from the Maryland Case Search, &lt;code&gt;bmore_address&lt;/code&gt;. Below are 3 examples of antijoining the two datasets using dplyr and two forms of baseR.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# quality control for missed addresses ------------------------------------
+# not creating new variables, so im just going to do it like this
+# three different ways to anti_join
+# 1
+no_geo_unique &amp;lt;- unique(bmore_address$full_address[!bmore_address$full_address%in%geo_bmore$full_address])
+
+# 2
+no_geo_case &amp;lt;- bmore_address[is.na(match(bmore_address$full_address, geo_bmore$full_address)), ]
+
+# 3
+anti_join(bmore_address, geo_bmore, by = &amp;quot;full_address&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that we have a dataset of all of the missing addresses that did not get geocoded, we are going to filter through the dataset and allow R to separate and clean the problematic rows that we could not address before!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# quality control workup --------------------------------------------------
+no_geo = no_geo_case
+# taking away so I can get unique values
+no_geo = no_geo %&amp;gt;%
+  select(-case_num)
+# takes rowname col into actual rownames
+no_geo = column_to_rownames(no_geo)
+# only gives unique addresses and keeps rownames
+no_geo = unique(no_geo)
+# add rowname col back after only getting unique addys
+# rownames basically = obs_num
+# use this to join again
+# no_geo = rownames_to_column(no_geo)
+
+
+# separating the address string
+problem_rows = as_tibble(str_split_fixed(no_geo$full_address,
+                                         # telling R to separate by commas
+                                         &amp;quot;, &amp;quot;,
+                                         # there should be at least 5 separations
+                                         n = 5))
+
+# we only needed these columns which were rowname, full_address
+problem_rows = paste0(str_c(problem_rows$V1,
+                            &amp;quot;, &amp;quot;,
+                            problem_rows$V3,
+                            &amp;quot;, &amp;quot;,
+                            problem_rows$V5
+))
+
+
+# converts from vector to df or tibble
+problem_rows = enframe(problem_rows)
+
+# renaming for future cleaning
+colnames(problem_rows)[1] &amp;lt;- &amp;quot;rowname&amp;quot;
+colnames(problem_rows)[2] &amp;lt;- &amp;quot;full_address&amp;quot;
+
+# adds correct obs_num to tbl_df/tbl/data.frame
+problem_rows = problem_rows %&amp;gt;%
+  mutate(rowname = rownames(no_geo))
+
+# sets appropriate &amp;quot;i&amp;quot; for while loop below. 
+problem_rows = column_to_rownames(problem_rows)
+
+# creating var
+new_geo &amp;lt;- c()
+
+i = 1
+while(i &amp;lt;= length(problem_rows$full_address)) {
+  no_geo_row &amp;lt;- geocode_OSM(problem_rows$full_address[i])
+  if(is.null(no_geo_row)){
+    i &amp;lt;- i + 1
+    next;
+  }
+  new_geo_row &amp;lt;- tibble(obs_num = i, 
+                        full_address = no_geo_row[[1]],
+                        # up and down
+                        lon = no_geo_row[[2]][1],
+                        # left to right
+                        lat = no_geo_row[[2]][2]
+  )
+  # creating geo_bmore sp object
+  new_geo &amp;lt;- bind_rows(new_geo, new_geo_row)
+  i &amp;lt;- i + 1
+}
+
+problem_rows$full_address[i]
+i &amp;lt;- i+1
+
+save(new_geo,
+     file = here::here(&amp;quot;data/tidy_data&amp;quot;,
+                       &amp;quot;new_geo.rda&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The original while loop was used for the list of problematic addresses and then saved to the local disk for safe keeping. I know, I know! Why did you not just turn the loop into a function? Well I didn’t know that at this point and time in my career! But I definitely do it more later on in work!&lt;/p&gt;
+&lt;p&gt;Here is some cleaning, tidying and data maintenance I had to do before using them to map anything:&lt;/p&gt;
+&lt;p&gt;HINTS:
+- &lt;code&gt;bmore_demo&lt;/code&gt; was a curated tidied dataset from all the case data that held age, race, name, address, court type, case type and other demographic data that was scraped and accumulated legally for THE FREE online using the Maryland Case Search Engine.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# collecting all data together --------------------------------------------
+# these both have correct coords and addresses
+# lets unite them together 
+head(new_geo)
+head(geo_bmore)
+
+# lets rename new_geo coded addresses so there isn&amp;#39;t a mix up
+colnames(new_geo)[2] &amp;lt;- &amp;quot;geocoded_addresses&amp;quot;
+
+
+# but first we need to make sure that addresses in new_geo will match addresses
+# bmore_demo YIKES YIKES YIKES!
+# renaming col for binding purposes
+colnames(problem_rows)[2] &amp;lt;- &amp;quot;geocoded_address&amp;quot;
+
+# problem_rows = no_geo, basically
+matching = cbind(problem_rows, no_geo)
+
+# join new_geo and matching by geocoded_addresses
+new_geo = left_join(new_geo, matching, by = &amp;quot;geocoded_address&amp;quot;)
+
+# take away incorrect current $obs_num and $geocoded_address
+new_geo = new_geo %&amp;gt;%
+  select(-obs_num)
+
+new_geo = new_geo %&amp;gt;%
+  select(-geocoded_address)
+
+# lets rearrange col order for perfect alignment
+new_geo = new_geo[, c(3,4,1,2)]
+
+# change rowname to finally correct obs_num
+colnames(new_geo)[1] &amp;lt;- &amp;quot;obs_num&amp;quot;
+
+# let&amp;#39;s rbind with geo_bmore and finally start mapping!!!!!!!!!!
+geo_bmore = rbind(geo_bmore, new_geo)
+geo_bmore = geo_bmore %&amp;gt;%
+  arrange(as.double(obs_num))
+
+
+# RUN TO MATCH geo_bmore DATASET - comment out after running
+# bmore_demo$full_address = paste0(str_c(bmore_demo$full_address, &amp;quot;, USA&amp;quot;))
+
+# DO NOT RUN UNTIL ALL GEOCODES HAVE BEEN ACCOUNTED FOR
+# lets use tmap package to see if we can get some coords
+bmore_demo = left_join(geo_bmore, bmore_demo, by = &amp;quot;full_address&amp;quot;)
+# nrow(bmore_demo)
+# 6721
+
+# FILTER FOR ONLY DISTRICT COURT CASES
+bmore_demo &amp;lt;- bmore_demo %&amp;gt;%
+  filter(case_type_2 != &amp;quot;Other&amp;quot;)
+# nrow(bmore_demo)
+# 6078 ~ geocoded
+# 7687 ~ filtered
+# 7748 ~ original # cases
+
+# Filter out Circuit Court cases
+bmore_demo &amp;lt;- bmore_demo[str_detect(bmore_demo$court, &amp;quot;District&amp;quot;),]
+# nrow(bmore_demo) - 80.46% retained
+# geo_coded ~ 3645 
+# filtered ~ 4530  
+
+bmore_demo_geo = bmore_demo
+# save this demo as bmore_demo_geo.rda
+# please keep original data set!!!!
+save(bmore_demo_geo,
+     file = here::here(&amp;quot;data/tidy_data&amp;quot;,
+                       &amp;quot;bmore_demo_geo.rda&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Creating a dataset of markers. Nothing special&lt;/p&gt;
+&lt;p&gt;HINTS:
+- &lt;code&gt;mdcs_demo_dfc&lt;/code&gt; was a semi tidy dataset that inlcuded all cases that were related to any of the officers that were apart of the Gun Trace Task Force in both the Circuit and District Court circuits.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# creating markers --------------------------------------------------------
+# UPDATE AND RERUN EVERY TIME NEW GEO_BMORE SP DATA IS ADDED
+# keeps only data that was geocoded
+bmore_plot1 &amp;lt;- left_join(geo_bmore, 
+                         bmore_address,
+                         by = &amp;quot;full_address&amp;quot;)
+# keeps all rows and data
+# bmore_plot2 &amp;lt;- left_join(bmore_address, 
+#                          geo_bmore,
+#                          by = &amp;quot;full_address&amp;quot;)
+
+# save under data set that has filtered out district court cases
+bmoredemo_markers1 &amp;lt;- left_join(bmore_plot1,
+                                mdcs_demo_dfc,
+                                by = &amp;quot;case_num&amp;quot;)
+# keeps all rows and data
+# bmoredemo_markers2 &amp;lt;- left_join(bmore_plot2,
+#                                mdcs_demo_dfc,
+#                                by = &amp;quot;case_num&amp;quot;)
+
+# have to do some sligt cleaning ~ run when data is new
+# bmoredemo_markers1 = bmoredemo_markers1 %&amp;gt;% select(-full_address.y)
+# colnames(bmoredemo_markers1)[colnames(bmoredemo_markers1) == &amp;quot;full_address.x&amp;quot;] &amp;lt;- &amp;quot;full_address&amp;quot;
+
+
+# this adds the charges data to the dataset
+bmoredemo_markers1 &amp;lt;- left_join(mdcs_charges_df,
+                                bmoredemo_markers1,
+                                by = &amp;quot;case_num&amp;quot;)
+
+# filtering out what I need only for demographic data
+bmoredemo_markers1 = bmoredemo_markers1 %&amp;gt;% 
+  dplyr::select(case_num,
+                full_address,
+                lat,
+                lon,
+                race_black,
+                race_cat,
+                age_yrs,
+                sex_id,
+                case_type,
+                case_type_2,
+                ) %&amp;gt;% 
+  group_by(case_num) %&amp;gt;% 
+  ungroup()
+
+# there are two incomplete addresses that are throwing the map off. 
+# bmoredemo_markers1 = bmoredemo_markers1 %&amp;gt;% filter(!case_num == &amp;quot;XXXXXXXX&amp;quot;|!case_num == &amp;quot;XXXXXXXXXXXXX&amp;quot;)
+# bmoredemo_markers1 = bmoredemo_markers1[bmoredemo_markers1$case_num != &amp;quot;XXXXXXXXXX&amp;quot;, ]
+# bmoredemo_markers1 = bmoredemo_markers1[bmoredemo_markers1$case_num != &amp;quot;XXXXXXXXXX&amp;quot;, ]
+
+# saves into local environment
+save(bmoredemo_markers1, 
+     file = here::here(&amp;quot;data/tidy_data&amp;quot;,
+                       &amp;quot;bmore_markers.rda&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;OKAY~~&lt;/p&gt;
+&lt;p&gt;So if you made it this far to see the maps….well good luck because I can only show you the code because of our American Justice System, and the fact that I respect my old employer lol…&lt;/p&gt;
+&lt;p&gt;This is where I allow my artist creativity run wild…within the confines of R and Leaflet!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# making the base map vars ------------------------------------------------
+# sex ~ M/F
+sex_icons &amp;lt;- colorFactor(c(&amp;quot;#0d2666&amp;quot;, &amp;quot;#53a097&amp;quot;, &amp;quot;#682140&amp;quot;),
+                         domain = unique(bmoredemo_markers1$sex_id))
+# mult races
+racecat_icons &amp;lt;- colorFactor(c(&amp;quot;#78840b&amp;quot;, &amp;quot;#036852&amp;quot;, &amp;quot;#a53208&amp;quot;),
+                             domain = unique(bmoredemo_markers1$race_cat))
+# black/nonblack
+raceblack_icons &amp;lt;- colorFactor(c(&amp;quot;#ffa500&amp;quot;, &amp;quot;#b7b2ac&amp;quot;),
+                               domain = unique(bmoredemo_markers1$race_black))
+# age
+pal &amp;lt;- colorNumeric(palette = diverge_hcl(5, &amp;quot;Berlin&amp;quot;),
+                    domain = bmoredemo_markers1$age_yrs)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now I know you guys are like, why only two genders… well our legal justice system doesn’t see otherwise unfortunately so there’s a whole subset of data unaccounted for to go along with broken window policing… oh yea..if you’re guessing hate crimes or sex workers being arrested…you were on the right path. Unfortunately our client was really interested on the impact these officers had on the &lt;code&gt;urban&lt;/code&gt; community so they were interested to see whether the officers were indeed practicing broken window policing OR was it a big misunderstanding?&lt;/p&gt;
+&lt;p&gt;I mean…our company alone scraped over 10,000 cases in a 7-10 year time frame…while the news under reported per usual. So…they were just being shit cops. The race categories were WHITE, BLACK, and OTHER.&lt;/p&gt;
+&lt;p&gt;Below is where all the work from above, and the work not seen that will be uploaded to other projects..cough cough. The map was interactive and super colorful. Like I mentioned earlier, let me see if I can post a picture here after talking to my previoud employer.&lt;/p&gt;
+&lt;p&gt;Thanks for stopping by ~&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# map making --------------------------------------------------------------
+# REMINDER: every time new variations are made must run empty leaflet line
+# or the map will just be written over and not rerun
+
+#          attribution = &amp;#39;Map tiles by &amp;lt;a href=&amp;quot;http://stamen.com&amp;quot;&amp;gt;Stamen Design&amp;lt;/a&amp;gt;, &amp;lt;a href=&amp;quot;http://creativecommons.org/licenses/by/3.0&amp;quot;&amp;gt;CC BY 3.0&amp;lt;/a&amp;gt; &amp;amp;mdash; Map data &amp;amp;copy; &amp;lt;a href=&amp;quot;http://www.openstreetmap.org/copyright&amp;quot;&amp;gt;OpenStreetMap&amp;lt;/a&amp;gt;. *Displayed cases are 80% of total data set aggregated. Cases are over a period of ~10yrs.
+
+
+# creates map object
+bmore_map = leaflet()
+
+# adding data
+# examples say to put addLayersControl() at end of map making
+bmore_map = bmore_map %&amp;gt;%
+  addTiles(&amp;#39;http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png&amp;#39;,
+  attribution = &amp;#39;Map tiles by &amp;lt;a href=&amp;quot;http://stamen.com&amp;quot;&amp;gt;Stamen Design&amp;lt;/a&amp;gt;, &amp;lt;a href=&amp;quot;http://creativecommons.org/licenses/by/3.0&amp;quot;&amp;gt;CC BY 3.0&amp;lt;/a&amp;gt; &amp;amp;mdash; Map data &amp;amp;copy; &amp;lt;a href=&amp;quot;http://www.openstreetmap.org/copyright&amp;quot;&amp;gt;OpenStreetMap&amp;lt;/a&amp;gt;. *Displayed cases are 80% of total data set aggregated. Cases are over a period of ~10yrs. Problem Forward &amp;amp;copy&amp;#39; ) %&amp;gt;%
+  fitBounds(-76.89493, 39.19533, -76.32139, 39.72115) %&amp;gt;%
+  addPolygons(data = baltimore_county,
+              group = &amp;quot;County&amp;quot;,
+              color = &amp;quot;#b799ff&amp;quot;,
+              fill = FALSE) %&amp;gt;%
+  addPolygons(data = baltimore_city,
+              group = &amp;quot;City&amp;quot;,
+              color = &amp;quot;#c0a5ff&amp;quot;,
+              fill = FALSE) %&amp;gt;%
+  addCircles(data = bmoredemo_markers1,
+             lng = ~lon,
+             lat = ~lat,
+             group = &amp;quot;Points&amp;quot;,
+             popup = bmoredemo_markers1$case_num,
+             weight = 3,
+             radius = 40,
+             stroke = TRUE,
+             fillOpacity = 0.8,
+             color = &amp;quot;#ff0000&amp;quot;,
+             label = ~ c(as.character(bmoredemo_markers1$case_num),
+                         as.character(bmoredemo_markers1$charge_desc)),
+             options = markerClusterOptions(removeOutsideVisibleBounds = TRUE)) %&amp;gt;%
+  addCircles(data = bmoredemo_markers1,
+             lng = ~lon,
+             lat = ~lat,
+             group = &amp;quot;Black/Non-Black&amp;quot;,
+             popup = bmoredemo_markers1$race_black,
+             weight = 3,
+             radius = 40,
+             stroke = TRUE,
+             fillOpacity = 0.8,
+             color = ~raceblack_icons(race_black),
+             label = ~as.character(bmoredemo_markers1$race_black),
+             options = markerClusterOptions(removeOutsideVisibleBounds = TRUE)) %&amp;gt;%
+  addLegend(&amp;quot;bottomright&amp;quot;,
+            colors = c(&amp;quot;#ffa500&amp;quot;, &amp;quot;#b7b2ac&amp;quot;),
+            labels = c(&amp;quot;Black&amp;quot;, &amp;quot;Non-Black&amp;quot;),
+            title = &amp;quot;Cases by Race&amp;quot;,
+            group = &amp;quot;Black/Non-Black&amp;quot;) %&amp;gt;%
+  addCircles(data = bmoredemo_markers1,
+             lng = ~lon,
+             lat = ~lat,
+             group = &amp;quot;Black/White/Other&amp;quot;,
+             popup = bmoredemo_markers1$race_cat,
+             weight = 3,
+             radius = 40,
+             stroke = TRUE,
+             fillOpacity = 0.8,
+             color = ~racecat_icons(race_cat),
+             label = ~as.character(bmoredemo_markers1$case_num),
+             options = markerClusterOptions(removeOutsideVisibleBounds = TRUE)) %&amp;gt;%
+  addLegend(&amp;quot;bottomright&amp;quot;,
+            colors = c(&amp;quot;#78840b&amp;quot;, &amp;quot;#036852&amp;quot;, &amp;quot;#a53208&amp;quot;),
+            labels = c(&amp;quot;Black&amp;quot;, &amp;quot;Other/Unknown&amp;quot;, &amp;quot;White&amp;quot;),
+            title = &amp;quot;Cases by Race Mult&amp;quot;,
+            group = &amp;quot;Black/White/Other&amp;quot;,
+            labFormat = labelFormat(group = &amp;quot;Black/White/Other&amp;quot;)) %&amp;gt;%
+  addCircles(data = bmoredemo_markers1,
+             lng = ~lon,
+             lat = ~lat,
+             group = &amp;quot;Female/Male&amp;quot;,
+             popup = bmoredemo_markers1$sex_id,
+             weight = 3,
+             radius = 40,
+             stroke = TRUE,
+             fillOpacity = 0.8,
+             color = ~sex_icons(sex_id),
+             label = ~as.character(bmoredemo_markers1$sex_id),
+             options = markerClusterOptions(removeOutsideVisibleBounds = TRUE)) %&amp;gt;%
+  addLegend(&amp;quot;bottomleft&amp;quot;,
+            colors = c( &amp;quot;#53a097&amp;quot;, &amp;quot;#0d2666&amp;quot;, &amp;quot;#682140&amp;quot;),
+            labels = c(&amp;quot;Male&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Other/Unknown&amp;quot;),
+            title = &amp;quot;Cases by Sex&amp;quot;,
+            group = &amp;quot;Female/Male&amp;quot;,
+            labFormat = labelFormat()) %&amp;gt;%
+  addCircles(data = bmoredemo_markers1,
+             lng = ~lon,
+             lat = ~lat,
+             group = &amp;quot;Age&amp;quot;,
+             weight = 2,
+             radius = 25,
+             stroke = TRUE,
+             fillOpacity = 0.5,
+             color = ~pal(age_yrs),
+             label = ~as.character(bmoredemo_markers1$age_yrs),
+             options = markerClusterOptions(removeOutsideVisibleBounds = TRUE)) %&amp;gt;%
+  addLegend(&amp;quot;bottomleft&amp;quot;,
+            pal = pal,
+            values = bmoredemo_markers1$age_yrs,
+            title = &amp;quot;Age&amp;quot;,
+            group = &amp;quot;Age&amp;quot;) %&amp;gt;%
+  addLayersControl(overlayGroups = c(&amp;quot;City&amp;quot;,
+                                     &amp;quot;County&amp;quot;),
+                   baseGroups = c(&amp;quot;Points&amp;quot;,
+                                  &amp;quot;Black/Non-Black&amp;quot;, 
+                                  &amp;quot;Black/White/Other&amp;quot;,
+                                  &amp;quot;Female/Male&amp;quot;,
+                                  &amp;quot;Age&amp;quot;),
+                   options = layersControlOptions(collapsed = TRUE, autoZIndex = TRUE)) %&amp;gt;%
+  hideGroup(c(&amp;quot;Points&amp;quot;,
+              &amp;quot;Black/Non-Black&amp;quot;, 
+              &amp;quot;Black/White/Other&amp;quot;,
+              &amp;quot;Female/Male&amp;quot;,
+              &amp;quot;Age&amp;quot;))
+
+  
+
+# data added on the map
+
+# saves map
+htmlwidgets::saveWidget(bmore_map,
+           file = here::here(&amp;quot;products/bmore_map.html&amp;quot;),
+           selfcontained = FALSE)
+
+webshot(&amp;quot;products/bmore_map.html&amp;quot;,
+        file = here::here(&amp;quot;products/bmore_map.png&amp;quot;,
+                          cliprect = &amp;quot;viewport&amp;quot;))
+
+
+
+mapshot(bmore_map, url = paste0(getwd(), &amp;quot;/bmore_map.html&amp;quot;))
+
+
+# actual function
+# function (map, urlTemplate = &amp;quot;//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&amp;quot;, 
+#           attribution = NULL, layerId = NULL, group = NULL, options = tileOptions()) 
+# {
+#   options$attribution = attribution
+#   if (missing(urlTemplate) &amp;amp;&amp;amp; is.null(options$attribution)) 
+#     options$attribution = paste(&amp;quot;&amp;amp;copy; &amp;lt;a href=\&amp;quot;http://openstreetmap.org\&amp;quot;&amp;gt;OpenStreetMap&amp;lt;/a&amp;gt;&amp;quot;, 
+#                                 &amp;quot;contributors, &amp;lt;a href=\&amp;quot;http://creativecommons.org/licenses/by-sa/2.0/\&amp;quot;&amp;gt;CC-BY-SA&amp;lt;/a&amp;gt;&amp;quot;)
+#   invokeMethod(map, getMapData(map), &amp;quot;addTiles&amp;quot;, urlTemplate, 
+#                layerId, group, options)
+# }
+
+
+
+# edited function
+# addTiles = function (map, urlTemplate = &amp;quot;**http:**//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&amp;quot;,
+#                      attribution = NULL, layerId = NULL, group = NULL, options = tileOptions())
+# {
+#   options$attribution = attribution
+#   if (missing(urlTemplate) &amp;amp;&amp;amp; is.null(options$attribution))
+#     options$attribution = paste(&amp;quot;© &amp;lt;a href=\&amp;quot;http://openstreetmap.org\&amp;quot;&amp;gt;OpenStreetMap&amp;quot;,
+#                                 &amp;quot;contributors, &amp;lt;a href=\&amp;quot;http://creativecommons.org/licenses/by-sa/2.0/\&amp;quot;&amp;gt;CC-BY-SA&amp;quot;)
+#   invokeMethod(map, getMapData(map), &amp;quot;addTiles&amp;quot;, urlTemplate,
+#                layerId, group, options)
+# }&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
