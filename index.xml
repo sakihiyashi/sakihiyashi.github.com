@@ -86,7 +86,95 @@
 
 &lt;div id=&#34;welcome&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Welcome&lt;/h1&gt;
-&lt;p&gt;Hey, my name Sakichi Hiyashi. I am black and trans, just going to get that out the way because I do not wish to be apart of a company who does not respect either of those aspects of myself. I did that previously and I literally had a meltdown. Never again.&lt;/p&gt;
+&lt;div id=&#34;downloading-files-from-google&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Downloading files from Google&lt;/h2&gt;
+&lt;p&gt;Hire me because look at how easy I made it for you to search and extract through all those files on that cluttered shared company GDrive lol.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# libraries needed
+library(readr)
+library(googledrive)
+library(dplyr)
+library(purrr)
+library(stringr)
+
+options(httr_oob_default = TRUE)
+
+# Logs in to Google Drive with user credentials
+drive_auth()
+
+# Saves the company team drive for easy reference 
+company_drive &amp;lt;- team_drive_get(&amp;quot;Insert Company Name Here&amp;quot;)
+
+# saving datapath
+datapath &amp;lt;- &amp;quot;enter/desired/path/here&amp;quot;
+
+# To download file: *uncomment 2 lines below* (perform once) *comment 2 lines below*
+# example &amp;lt;- drive_get(&amp;quot;example_file.which_file_type&amp;quot;,
+#                      team_drive = pfdrive) # keep this line
+# drive_download(example, path = str_c(datapath, &amp;quot;example_file.which_file_type&amp;quot;))
+
+# use correct function to read in data
+enter_fucntion_here&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is if you need to grab a bunch of files from Google.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;########## TO DOWNLOAD MULTIPLE FILES
+
+# if files have similar names
+example_list &amp;lt;- drive_find(pattern = &amp;quot;example&amp;quot;, # char string that is common  
+                           team_drive = company_drive) # keep this line
+
+datapath &amp;lt;- &amp;quot;enter/desired/path/here&amp;quot;
+
+## To download files *uncomment 2 lines below* (perform once) *comment 2 lines below*
+# pwalk(example_list,
+#       ~drive_download(as_id(..2), # ..2 refers to column 2 for the ID; KEEP THIS LINE
+                      # path = str_c(datapath, 
+                      #              &amp;quot;enter/local/dir/path/here&amp;quot;, 
+                      #              ..1), # KEEP THIS LINE
+#                       overwrite = TRUE)) #KEEP THIS LINE
+
+# repeat process as necessary&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;uploading-files-into-google&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Uploading files into Google&lt;/h2&gt;
+&lt;p&gt;Finally got all the crap done and need to upload it into the drive?&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# libraries needed
+library(googledrive)
+library(purrr)
+library(tidyverse)
+
+# allows google to have API access
+options(httr_oob_default = TRUE)
+
+# authorizes users email and session info
+# run this to access google drive!!
+drive_auth()
+
+# select option 2
+# when new tab pops open click work email, click allow, copy link
+# paste into console
+
+# get team drive directory
+pfdrive &amp;lt;- team_drive_get(&amp;quot;Company Name&amp;quot;) # keep this line
+
+# sets path for new specific folder for data
+
+datapath &amp;lt;-drive_get(&amp;quot;enter_googledive_folder_here/add_folders/if_needed&amp;quot;, 
+                     team_drive = &amp;quot;Company Name&amp;quot;) # keep this line
+
+# files saved on disk or in REnviron ------------------------------------------------
+# get all files we want to upload in GDrive
+local_files &amp;lt;- list.files(&amp;quot;/enter/file/path/here/&amp;quot;,
+                          full.names = TRUE) # keep line
+
+# creates the folder
+folder &amp;lt;- drive_mkdir(name = &amp;quot;create_new_folder_in_google_drive&amp;quot;,
+                      parent = datapath) # do not change
+
+map(local_files, drive_upload, path = folder, verbose = F) # do not change
+
+
+# repeat process as necessary&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now you can be less stressed when someone asks for a file lol. Just run the script for two seconds after filling in the gaps! Let R do all the searching ~~&lt;/p&gt;
+&lt;/div&gt;
 &lt;/div&gt;
 </description>
     </item>
